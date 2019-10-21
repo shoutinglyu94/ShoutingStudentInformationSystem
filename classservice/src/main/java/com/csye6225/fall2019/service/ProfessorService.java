@@ -14,10 +14,8 @@ public class ProfessorService {
 	public ProfessorService() {
 	}
 	
-	// Getting a list of all professor 
-	// GET "..webapi/professors"
+	// Get all professor from the system.
 	public List<Professor> getAllProfessors() {	
-		//Getting the list
 		List<Professor> list = new ArrayList<>();
 		for (Professor prof : profMap.values()) {
 			list.add(prof);
@@ -25,11 +23,11 @@ public class ProfessorService {
 		return list;
 	}
 
-	// Adding a professor
+	// Add a new professor.
 	public Professor addProfessor(String name, String department, Date joiningDate) {
-		// Next Id 
+		// Next id. 
 		long nextAvailableId = profMap.size() + 1;
-		//Create a Professor Object
+		//Create a Professor Object.
 		Professor prof = new Professor(String.valueOf(nextAvailableId), name, 
 				department, joiningDate.toString());
 		profMap.put(String.valueOf(nextAvailableId), prof);
@@ -37,31 +35,42 @@ public class ProfessorService {
 	}
 	
 	
-	// Getting One Professor
+	// Get a Professor by id.
 	public Professor getProfessor(String profId) {
-		 //Simple HashKey Load
-		 Professor prof = profMap.get(profId);
-	     System.out.println("Item retrieved:");
-	     System.out.println(prof.toString());
-		return prof;
+		 Professor professor = profMap.get(profId);
+		 if(professor == null) {
+			 System.out.println("Professor doesn't exist!");
+		 } else {
+			 System.out.println("Professor retrieved:");
+		     System.out.println(professor.toString());
+		 }
+	     return professor;
 	}
 	
-	// Deleting a professor
+	// Delete a professor by id.
 	public Professor deleteProfessor(String profId) {
-		Professor deletedProfDetails = profMap.get(profId);
+		Professor professor = profMap.get(profId);
+		
+		if(professor == null) {
+			System.out.println("Professor doesn't exist!");
+		} else {
+			System.out.println("Professor removing:");
+			System.out.println(professor.toString());
+		}
 		profMap.remove(profId);
-		return deletedProfDetails;
+		return professor;
 	}
 	
-	// Updating Professor Info
+	// Update professor information.
 	public Professor updateProfessorInformation(String profId, Professor prof) {	
 		Professor oldProfObject = profMap.get(profId);
 		String oldProfId = oldProfObject.getId();
 		prof.setId(oldProfId);
+		profMap.put(oldProfId, prof);
 		return prof;
 	}
 	
-	// Get professors in a department 
+	// Search professors in a department 
 	public List<Professor> getProfessorsByDepartment(String department) {	
 		//Getting the list
 		ArrayList<Professor> list = new ArrayList<>();

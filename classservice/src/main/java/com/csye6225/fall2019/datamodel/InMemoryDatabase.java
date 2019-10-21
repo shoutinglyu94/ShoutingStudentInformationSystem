@@ -1,7 +1,5 @@
 package com.csye6225.fall2019.datamodel;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
