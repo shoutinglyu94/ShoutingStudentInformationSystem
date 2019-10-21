@@ -1,4 +1,4 @@
-package com.csye6225.fall2019.courseservice;
+package com.csye6225.fall2019.classservice;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,7 +8,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Path("myresource")
+@Path("/myresource")
 public class MyResource {
 
     /**
