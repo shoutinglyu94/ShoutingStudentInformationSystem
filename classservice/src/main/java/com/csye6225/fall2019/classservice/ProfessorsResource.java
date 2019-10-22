@@ -40,7 +40,7 @@ public class ProfessorsResource {
 	public Response getProfessorsByDeparment(
 			@QueryParam("department") String department) {
 		List<Professor> list = null;
-		if (department == null) {
+		if (department == null || department.isEmpty()) {
 			list = profService.getAllProfessors();
 		} else {
 			list = profService.getProfessorsByDepartment(department);
@@ -49,11 +49,14 @@ public class ProfessorsResource {
 		return Response.status(Status.OK).entity(entity).build();
 	}
 	
-	// ... webapi/professor/1 
 	@GET
 	@Path("/{professorId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Professor getProfessor(@PathParam("professorId") String profId) {
+		if(profId == null) {
+			System.out.println("No professorId in url.");
+			return null;
+		}
 		System.out.println("Professor Resource: Looking for: " + profId);
 		return profService.getProfessor(profId);
 	}
@@ -62,6 +65,10 @@ public class ProfessorsResource {
 	@Path("/{professorId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Professor deleteProfessor(@PathParam("professorId") String profId) {
+		if(profId == null) {
+			System.out.println("No professorId in url.");
+			return null;
+		}
 		return profService.deleteProfessor(profId);
 	}
 	
@@ -69,6 +76,10 @@ public class ProfessorsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Professor addProfessor(Professor prof) {
+		if(prof == null) {
+			System.out.println("No prof in json.");
+			return null;
+		}
 		long yourmilliseconds = System.currentTimeMillis();
 		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");    
 		Date curTime = new Date(yourmilliseconds);
@@ -81,6 +92,14 @@ public class ProfessorsResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Professor updateProfessor(@PathParam("professorId") String profId, 
 			Professor prof) {
+		if(profId == null) {
+			System.out.println("No profId in url.");
+			return null;
+		}
+		if(prof == null) {
+			System.out.println("No professor in json.");
+			return null;
+		}
 		return profService.updateProfessorInformation(profId, prof);
 	}
 }

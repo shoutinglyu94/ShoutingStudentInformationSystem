@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.csye6225.fall2019.datamodel.InMemoryDatabase;
+import com.csye6225.fall2019.model.Course;
 import com.csye6225.fall2019.model.Professor;
 
 public class ProfessorService {
-
+	static Map<String, Course> courseMap = InMemoryDatabase.getCourseDB();
 	static Map<String, Professor> profMap = InMemoryDatabase.getProfessorDB();
 	public ProfessorService() {
 	}
@@ -50,7 +52,6 @@ public class ProfessorService {
 	// Delete a professor by id.
 	public Professor deleteProfessor(String profId) {
 		Professor professor = profMap.get(profId);
-		
 		if(professor == null) {
 			System.out.println("Professor doesn't exist!");
 		} else {
@@ -58,27 +59,42 @@ public class ProfessorService {
 			System.out.println(professor.toString());
 		}
 		profMap.remove(profId);
+		Set<String> courses = professor.getTeachCourses();
+		// Remove professor reference from teaching courses.
+		for(String courseId : courses) {
+			courseMap.get(courseId).setProfessor(null);
+		}
 		return professor;
 	}
 	
 	// Update professor information.
 	public Professor updateProfessorInformation(String profId, Professor prof) {	
-		Professor oldProfObject = profMap.get(profId);
-		String oldProfId = oldProfObject.getId();
-		prof.setId(oldProfId);
-		profMap.put(oldProfId, prof);
-		return prof;
+		Professor oldProfessor = profMap.get(profId);
+		if(oldProfessor == null) {
+			System.out.println("Professor doesn't exist, can't update!");
+			return null;
+		}
+		if(prof.getDepartment()!= null) {
+			oldProfessor.setDepartment(prof.getDepartment());
+		}
+		if(prof.getName() != null) {
+			oldProfessor.setName(prof.getName());
+		}
+		if(prof.getImageUrl() != null) {
+			oldProfessor.setImageUrl(prof.getImageUrl());
+		}
+		return oldProfessor;
 	}
 	
 	// Search professors in a department 
 	public List<Professor> getProfessorsByDepartment(String department) {	
 		//Getting the list
-		ArrayList<Professor> list = new ArrayList<>();
+		List<Professor> list = new ArrayList<>();
 		for (Professor prof : profMap.values()) {
 			if (prof.getDepartment().equals(department)) {
 				list.add(prof);
 			}
 		}
-		return list ;
+		return list;
 	}
 }

@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -17,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.csye6225.fall2019.model.Professor;
 import com.csye6225.fall2019.model.Student;
 import com.csye6225.fall2019.service.StudentService;
 
@@ -39,6 +39,10 @@ public class StudentResource {
 	@Path("/{studentId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Student getStudent(@PathParam("studentId") String studentId) {
+		if(studentId == null) {
+			System.out.println("No student id in url.");
+			return null;
+		}
 		System.out.println("Student Resource: Looking for: " + studentId);
 		return studentService.getStudent(studentId);
 	}
@@ -48,7 +52,7 @@ public class StudentResource {
 	public Response getStudentByProgram(
 			@QueryParam("program") String program) {
 		List<Student> list = null;
-		if (program == null) {
+		if (program == null || program.isEmpty()) {
 			list = studentService.getAllStudents();
 		} else {
 			list = studentService.searchStudentByProgram(program);
@@ -61,6 +65,10 @@ public class StudentResource {
 	@Path("/{studentId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Student deleteStudent(@PathParam("studentId") String studentId) {
+		if(studentId == null) {
+			System.out.println("No student id in url");
+			return null;
+		}
 		return studentService.deleteStudent(studentId);
 	}
 	
@@ -68,11 +76,32 @@ public class StudentResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Student addStudent(Student student) {
+		if(student == null) {
+			System.out.println("No student in json.");
+			return null;
+		}
 		long time = System.currentTimeMillis();
 		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");    
 		Date curDate = new Date(time);
 		return studentService.addStudent(student.getName(), student.getProgram(), curDate);
 	}
+	
+	@PUT
+	@Path("/{studentId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Student updateStudent(@PathParam("studentId") String studentId, Student student) {
+		if(studentId == null) {
+			System.out.println("No studentId in url.");
+			return null;
+		}
+		if(student == null) {
+			System.out.println("No student in json.");
+			return null;
+		}
+		return studentService.updateStudentInformation(studentId, student);
+	}
+	
 	
 	
 

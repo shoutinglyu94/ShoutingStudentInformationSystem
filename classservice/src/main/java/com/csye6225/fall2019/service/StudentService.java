@@ -64,4 +64,22 @@ public class StudentService {
 		}
 		return students;
 	}
+	
+	public Student updateStudentInformation(String studentId, Student student) {
+		Student oldStudent = studentMap.get(studentId);
+		if(oldStudent == null) {
+			System.out.println("Student doesn't exist, can't update!");
+			return null;
+		}
+		if(student.getName() != null) {
+			oldStudent.setName(student.getName());
+		}
+		if(student.getProgram() != null) {
+			oldStudent.setProgram(student.getProgram());
+		}
+		if(student.getImageUrl()!= null) {
+			oldStudent.setImageUrl(student.getImageUrl());
+		}
+		return oldStudent;
+	}
 }
