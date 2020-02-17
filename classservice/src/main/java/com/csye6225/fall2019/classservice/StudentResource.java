@@ -101,8 +101,5 @@ public class StudentResource {
 		}
 		return studentService.updateStudentInformation(studentId, student);
 	}
-	
-	
-	
 
 }
